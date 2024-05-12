@@ -44,12 +44,13 @@ export const expenseRoutes = new Hono()
   })
   .post("/", zValidator("json", createPostSchema), async (c) => {
     const expense = await c.req.valid("json");
-    fakeExpenses.push({
+    const newExpense = {
       ...expense,
-      id: ++fakeExpenses.length,
-    });
+      id: fakeExpenses.length + 1,
+    };
+    fakeExpenses.push(newExpense);
     c.status(201);
-    return c.json(expense);
+    return c.json(newExpense);
   })
   .get("/total-spent", (c) => {
     const total = fakeExpenses.reduce((acc, current) => {
