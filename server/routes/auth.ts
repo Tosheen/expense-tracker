@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import { kindeClient, sessionManager } from "../kinde";
+import { kindeClient, sessionManager, userMiddleware } from "../kinde";
 
 export const authRoutes = new Hono()
   .get("/login", async (c) => {
@@ -19,11 +19,10 @@ export const authRoutes = new Hono()
     const logoutUrl = await kindeClient.logout(sessionManager(c));
     return c.redirect(logoutUrl.toString());
   })
-  .get("/me", async (c) => {
-    const isAuthenticated = await kindeClient.isAuthenticated(
-      sessionManager(c)
-    );
+  .get("/me", userMiddleware, async (c) => {
+    const user = c.var.user;
+
     return c.json({
-      isAuthenticated,
+      user,
     });
   });
