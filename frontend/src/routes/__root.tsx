@@ -1,7 +1,17 @@
-import { createRootRoute, Link, Outlet } from "@tanstack/react-router";
+import {
+  createRootRouteWithContext,
+  Link,
+  Outlet,
+} from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 
-export const Route = createRootRoute({
+import { AuthUser } from "@/hooks/use-auth";
+
+interface RootRouterContext {
+  auth: AuthUser;
+}
+
+export const Route = createRootRouteWithContext<RootRouterContext>()({
   component: Root,
 });
 
@@ -19,6 +29,9 @@ function NavBar() {
       </Link>
       <Link to="/create-expense" className="[&.active]:font-bold">
         Create Expense
+      </Link>
+      <Link to="/profile" className="[&.active]:font-bold">
+        Profile
       </Link>
     </div>
   );
