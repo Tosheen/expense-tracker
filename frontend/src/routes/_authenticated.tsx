@@ -1,11 +1,26 @@
 import { createFileRoute, Outlet } from "@tanstack/react-router";
 
 const Login = () => {
-  return <div>You have to login</div>;
+  return (
+    <div className="p-2 max-w-lg mx-auto space-y-2">
+      <h3>You have to login</h3>
+      <p>
+        <a href="/api/login">Login!</a>
+      </p>
+    </div>
+  );
+};
+
+const Loading = () => {
+  return <div className="p-2 max-w-lg mx-auto">Loading user data...</div>;
 };
 
 const Protected = () => {
-  const { user } = Route.useRouteContext();
+  const { user, isFetchingUser } = Route.useRouteContext();
+
+  if (isFetchingUser === true) {
+    return <Loading />;
+  }
 
   if (user == null) {
     return <Login />;
@@ -15,11 +30,10 @@ const Protected = () => {
 };
 
 export const Route = createFileRoute("/_authenticated")({
-  beforeLoad: async () => {
+  beforeLoad: async ({ context }) => {
     return {
-      user: {
-        name: "Branko",
-      },
+      user: context.user,
+      isFetchingUser: context.isFetchingUser,
     };
   },
   component: Protected,

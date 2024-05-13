@@ -1,7 +1,17 @@
-import { createRootRoute, Link, Outlet } from "@tanstack/react-router";
+import {
+  createRootRouteWithContext,
+  Link,
+  Outlet,
+} from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
+import type { UserType } from "@kinde-oss/kinde-typescript-sdk";
 
-export const Route = createRootRoute({
+interface RootRouteContext {
+  user: UserType | null;
+  isFetchingUser: boolean;
+}
+
+export const Route = createRootRouteWithContext<RootRouteContext>()({
   component: Root,
 });
 
