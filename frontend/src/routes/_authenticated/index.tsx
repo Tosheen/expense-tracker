@@ -34,23 +34,23 @@ function Index() {
     retry: 0,
   });
 
+  console.log({
+    total,
+  });
+
   if (total.isError && total.error) {
     return <div>{total.error.message}</div>;
   }
 
-  if (total.data != null) {
-    return (
-      <div className="p-2">
-        <Card>
-          <CardHeader>
-            <CardTitle>Total Spent</CardTitle>
-            <CardDescription>The total amount you've spent</CardDescription>
-          </CardHeader>
-          <CardContent>{total.isPending ? "..." : total.data}</CardContent>
-        </Card>
-      </div>
-    );
-  }
-
-  return null;
+  return (
+    <div className="p-2">
+      <Card>
+        <CardHeader>
+          <CardTitle>Total Spent</CardTitle>
+          <CardDescription>The total amount you've spent</CardDescription>
+        </CardHeader>
+        <CardContent>{total.isPending ? "..." : total.data}</CardContent>
+      </Card>
+    </div>
+  );
 }
