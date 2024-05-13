@@ -40,15 +40,15 @@ function Index() {
 
   if (total.data != null) {
     return (
-      <>
-        <Card className="w-[350px] mx-auto">
+      <div className="p-2">
+        <Card>
           <CardHeader>
             <CardTitle>Total Spent</CardTitle>
             <CardDescription>The total amount you've spent</CardDescription>
           </CardHeader>
           <CardContent>{total.isPending ? "..." : total.data}</CardContent>
         </Card>
-      </>
+      </div>
     );
   }
 

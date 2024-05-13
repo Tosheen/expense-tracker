@@ -9,7 +9,7 @@ function Profile() {
 
   if (user != null) {
     return (
-      <div className="p-2 max-w-lg mx-auto">
+      <div className="p-2">
         <h2>Hello from profile</h2>
         <p>{user.family_name}</p>
         <p>
