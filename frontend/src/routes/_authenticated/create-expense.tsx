@@ -1,12 +1,17 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useForm } from "@tanstack/react-form";
+import { zodValidator } from "@tanstack/zod-form-adapter";
 import type { FieldApi } from "@tanstack/react-form";
+import { z } from "zod";
 
 import { api } from "@/lib/api";
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+
+import { createExpenseSchema } from "@server/shared-schemas";
 
 export const Route = createFileRoute("/_authenticated/create-expense")({
   component: CreateExpense,
@@ -30,14 +35,19 @@ function CreateExpense() {
     defaultValues: {
       title: "",
       amount: "0",
+      date: new Date(),
     },
+    validatorAdapter: zodValidator,
     onSubmit: async ({ value }) => {
       await new Promise((resolve) => {
         setTimeout(() => resolve(true), 1000);
       });
 
       const response = await api.expenses.$post({
-        json: value,
+        json: {
+          ...value,
+          date: value.date.toISOString(),
+        },
       });
 
       if (response.ok === false) {
@@ -64,6 +74,9 @@ function CreateExpense() {
         <div className="grid w-full items-center gap-1.5">
           <form.Field
             name="title"
+            validators={{
+              onChange: createExpenseSchema.shape.title,
+            }}
             children={(field) => {
               return (
                 <>
@@ -86,6 +99,9 @@ function CreateExpense() {
         <div className="grid w-full items-center gap-1.5">
           <form.Field
             name="amount"
+            validators={{
+              onChange: createExpenseSchema.shape.amount,
+            }}
             children={(field) => {
               return (
                 <>
@@ -101,6 +117,26 @@ function CreateExpense() {
                   />
                   <FieldInfo field={field} />
                 </>
+              );
+            }}
+          ></form.Field>
+        </div>
+        <div className="grid w-full items-center gap-1.5">
+          <form.Field
+            name="date"
+            validators={{
+              onChange: z.date(),
+            }}
+            children={(field) => {
+              return (
+                <div className="inline-flex">
+                  <Calendar
+                    mode="single"
+                    selected={field.state.value}
+                    onSelect={(date) => field.handleChange(date ?? new Date())}
+                    className="rounded-md border w-full"
+                  />
+                </div>
               );
             }}
           ></form.Field>

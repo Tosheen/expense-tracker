@@ -17,22 +17,26 @@ export const Route = createRootRouteWithContext<RootRouteContext>()({
 
 function NavBar() {
   return (
-    <div className="p-2 flex gap-2 max-w-2xl mx-auto">
+    <div className="p-2 max-w-4xl mx-auto flex justify-between">
       <Link to="/" className="[&.active]:font-bold">
-        Home
+        <h2>
+          <strong>Expense tracker</strong>
+        </h2>
       </Link>{" "}
-      <Link to="/about" className="[&.active]:font-bold">
-        About
-      </Link>
-      <Link to="/expenses" className="[&.active]:font-bold">
-        Expenses
-      </Link>
-      <Link to="/create-expense" className="[&.active]:font-bold">
-        Create Expense
-      </Link>
-      <Link to="/profile" className="[&.active]:font-bold">
-        Profile
-      </Link>
+      <div className="flex gap-2">
+        <Link to="/about" className="[&.active]:font-bold">
+          About
+        </Link>
+        <Link to="/expenses" className="[&.active]:font-bold">
+          Expenses
+        </Link>
+        <Link to="/create-expense" className="[&.active]:font-bold">
+          Create Expense
+        </Link>
+        <Link to="/profile" className="[&.active]:font-bold">
+          Profile
+        </Link>
+      </div>
     </div>
   );
 }

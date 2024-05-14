@@ -7,21 +7,13 @@ import { db } from "../db";
 import { userMiddleware } from "../kinde";
 import { expenses as expensesTable } from "../db/schema/expenses";
 
+import { createExpenseSchema } from "../shared-schemas";
+
 export type Expense = {
   id: number;
   title: string;
   amount: string;
 };
-
-const expenseSchema = z.object({
-  id: z.number().int().positive().min(1),
-  title: z.string().min(3).max(100),
-  amount: z.string(),
-});
-
-const createPostSchema = expenseSchema.omit({
-  id: true,
-});
 
 export const expenseRoutes = new Hono()
   .get("/", userMiddleware, async (c) => {
@@ -40,7 +32,7 @@ export const expenseRoutes = new Hono()
   .post(
     "/",
     userMiddleware,
-    zValidator("json", createPostSchema),
+    zValidator("json", createExpenseSchema),
     async (c) => {
       const user = c.var.user;
       const expense = await c.req.valid("json");

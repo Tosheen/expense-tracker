@@ -18,7 +18,9 @@
       "@/*": [
         "./src/*"
       ],
-      "@server": ["../server/*"]
+      "@server/*": [
+        "../server/*"
+      ]
     },
 
     /* Linting */
