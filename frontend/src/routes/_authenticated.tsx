@@ -5,7 +5,7 @@ const Login = () => {
   return (
     <div className="p-2 max-w-lg mx-auto space-y-2">
       <h3>You have to login or register</h3>
-      <p className="grid grid-cols-2 gap-4">
+      <p className="flex gap-4">
         <div>
           <Button asChild>
             <a href="/api/login">Login!</a>
