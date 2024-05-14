@@ -6,6 +6,8 @@ import {
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 import type { UserType } from "@kinde-oss/kinde-typescript-sdk";
 
+import { Toaster } from "@/components/ui/sonner";
+
 interface RootRouteContext {
   user: UserType | null;
   isFetchingUser: boolean;
@@ -31,7 +33,7 @@ function NavBar() {
           Expenses
         </Link>
         <Link to="/create-expense" className="[&.active]:font-bold">
-          Create Expense
+          Create
         </Link>
         <Link to="/profile" className="[&.active]:font-bold">
           Profile
@@ -49,7 +51,7 @@ function Root() {
       <div className="max-w-xl mx-auto mt-4">
         <Outlet />
       </div>
-
+      <Toaster />
       <TanStackRouterDevtools />
     </>
   );

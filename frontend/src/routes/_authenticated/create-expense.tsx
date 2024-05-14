@@ -3,8 +3,7 @@ import { useForm } from "@tanstack/react-form";
 import { zodValidator } from "@tanstack/zod-form-adapter";
 import type { FieldApi } from "@tanstack/react-form";
 import { z } from "zod";
-
-import { api } from "@/lib/api";
+import { toast } from "sonner";
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -12,6 +11,8 @@ import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 
 import { createExpenseSchema } from "@server/shared-schemas";
+
+import { useExpenses } from "@/hooks/use-expenses";
 
 export const Route = createFileRoute("/_authenticated/create-expense")({
   component: CreateExpense,
@@ -30,6 +31,7 @@ function FieldInfo({ field }: { field: FieldApi<any, any, any, any> }) {
 }
 
 function CreateExpense() {
+  const expenses = useExpenses();
   const navigate = useNavigate();
   const form = useForm({
     defaultValues: {
@@ -39,24 +41,21 @@ function CreateExpense() {
     },
     validatorAdapter: zodValidator,
     onSubmit: async ({ value }) => {
-      await new Promise((resolve) => {
-        setTimeout(() => resolve(true), 1000);
-      });
+      if (expenses.status === "loaded") {
+        navigate({
+          to: "/expenses",
+        });
+        try {
+          await expenses.actions.createNewExpenseItem({
+            ...value,
+            date: value.date.toISOString(),
+          });
 
-      const response = await api.expenses.$post({
-        json: {
-          ...value,
-          date: value.date.toISOString(),
-        },
-      });
-
-      if (response.ok === false) {
-        throw new Error("server error");
+          toast.success("Successfully created new expense.");
+        } catch (error) {
+          toast.error("Failed to create new expense.");
+        }
       }
-
-      navigate({
-        to: "/expenses",
-      });
     },
   });
 

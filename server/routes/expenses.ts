@@ -13,6 +13,7 @@ export type Expense = {
   id: number;
   title: string;
   amount: string;
+  date: string;
 };
 
 export const expenseRoutes = new Hono()
@@ -44,7 +45,7 @@ export const expenseRoutes = new Hono()
         })
         .returning();
 
-      return c.json(newExpense);
+      return c.json(newExpense[0]);
     }
   )
   .get("/total-spent", userMiddleware, async (c) => {
@@ -84,10 +85,6 @@ export const expenseRoutes = new Hono()
       .delete(expensesTable)
       .where(and(eq(expensesTable.userId, user.id), eq(expensesTable.id, id)))
       .returning();
-
-    if (expense == null) {
-      return c.notFound();
-    }
 
     return c.json(expense[0]);
   });
